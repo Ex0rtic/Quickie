@@ -28,7 +28,6 @@ const app = express()
 
 // Middleware
 app.use(cors({
-  credentials: true,
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
