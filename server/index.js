@@ -7,6 +7,11 @@ import cookieParser from 'cookie-parser'
 import morgan from 'morgan'
 import helmet from 'helmet'
 
+const allowedOrigins = [
+  'http://localhost:5173', // for dev
+  'https://quickie-snzf.vercel.app' // for production
+];
+
 import connectDB from './config/connectDB.js'
 
 // Routers
@@ -24,7 +29,14 @@ const app = express()
 // Middleware
 app.use(cors({
   credentials: true,
-  origin: process.env.FRONTEND_URL,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
 }))
 app.use(express.json())
 app.use(cookieParser())
